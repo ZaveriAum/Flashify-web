@@ -5,11 +5,13 @@ import useAuth from "../../hooks/useAuth";
 import { getFolders } from "../../services/folder";
 import { useToast } from "../../context/ToastContext";
 import folderIcon from "../../assets/folder-icon.svg"
+import addFolderIcon from "../../assets/add-folder-icon.svg"
 
 export default function Home(){
 
     const { addToast } = useToast();
     const { auth } = useAuth();
+    const [searchName, setSearchName] = useState("");
     const [folders, setFolders] = useState([]);
 
     useEffect(()=>{
@@ -34,6 +36,10 @@ export default function Home(){
     return(
         <div className="home-container">
             <NavBar/>
+            <div className="search-container">
+                <input type="text" placeholder="Search by Names" value={searchName} className="searchName"/>
+                <img src={addFolderIcon} alt="add-folder-icon" className="add-folder-icon"/>
+            </div>
             <div className="folders-container">
                 {folders.length > 0 ? (
                     folders.map((folder, index) => (

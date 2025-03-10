@@ -4,6 +4,27 @@
     padding: 25px;
 }
 
+.search-container{
+    margin-top: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+
+.searchName{
+    width: 20%;
+    padding: 10px;
+    border: #7B83EB 2px solid;
+    border-radius: 15px;
+}
+
+.add-folder-icon{
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
 .folders-container {
     display: flex;
     align-items: center;
