@@ -1,0 +1,5 @@
+.profile-container{
+    height: 100vh;
+    background-image: linear-gradient(to bottom, #7B83EB, #ADA9FF, #EDEDF2);
+    padding: 25px;
+}

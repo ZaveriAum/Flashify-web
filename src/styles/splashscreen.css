@@ -1,0 +1,51 @@
+.splashscreen-container{
+    height: 100vh;
+    background-image: linear-gradient(to bottom, #7B83EB, #ADA9FF, #EDEDF2);
+    padding: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.spashscreen-appname{
+    color: white;
+    font-weight: 600;
+    font-size: 10rem;
+}
+
+.splashscreen-get-started-button {
+    display: flex;
+    align-items: center;
+    font-family: inherit;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 17px;
+    padding: 0.8em 1.3em 0.8em 0.9em;
+    color: white;
+    background: #ad5389;
+    background: linear-gradient(to right, #0f0c29, #302b63, #24243e);
+    border: none;
+    letter-spacing: 0.05em;
+    border-radius: 16px;
+  }
+  
+  .splashscreen-get-started-button svg {
+    margin-right: 3px;
+    transform: rotate(30deg);
+    transition: transform 0.5s cubic-bezier(0.76, 0, 0.24, 1);
+  }
+  
+  .splashscreen-get-started-button span {
+    font-size: 1.3rem;
+    transition: transform 0.5s cubic-bezier(0.76, 0, 0.24, 1);
+  }
+  
+  .splashscreen-get-started-button:hover svg {
+    transform: translateX(5px) rotate(90deg);
+  }
+  
+  .splashscreen-get-started-button:hover span {
+    transform: translateX(7px);
+  }
+  

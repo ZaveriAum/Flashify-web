@@ -30,4 +30,4 @@ const refreshToken = async () => {
   return response.data
 }
 
-export {login,refreshToken,signup}
+export {login,refreshToken,signup, logout}

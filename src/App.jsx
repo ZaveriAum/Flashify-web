@@ -5,11 +5,17 @@ import Login from './pages/Login/Login';
 // import ErrorPage from './pages/ErrorPage/ErrorPage';
 import Register from './pages/Register/Register';
 import Home from "./pages/Home/Home";
+import Profile from "./pages/Profile/Profile";
+import SplashScreen from "./pages/Splash/SplashScreen";
 function App() {
   const router = createBrowserRouter([
     {
       element: <PersistLogin />,
       children: [
+        {
+          path: "/",
+          element: <SplashScreen/>
+        },
         {
           path: "/login", 
           element: <Login/>,
@@ -21,6 +27,10 @@ function App() {
         {
           path:"/app",
           element:<Home/>
+        },
+        {
+          path:"/profile",
+          element:<Profile/>
         }
       ]
     }

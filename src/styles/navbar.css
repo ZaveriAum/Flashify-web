@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Aldrich&family=Teko:wght@300..700&family=Tomorrow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
 .navbar-container {
     display: flex;
     justify-content: space-between;
@@ -16,6 +18,7 @@
     font-size: 2.5rem;
     margin-left: 20px;
     white-space: nowrap;
+    text-decoration: none;
 }
 
 .navbar-menu {
@@ -34,9 +37,14 @@
 }
 
 .logout-button {
-    color: rgb(255, 83, 83);
-    font-weight: 300;
-    font-size: 1.8rem;
+    background: transparent;
+    border: none; 
+    color: rgb(255, 83, 83); 
+    font-family: 'Teko';
+    font-weight: 400;
+    font-size: 2rem;
+    cursor: pointer;          
+    padding: 5px 10px;        
 }
 
 @media screen and (max-width: 360px) {
