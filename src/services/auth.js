@@ -30,4 +30,15 @@ const refreshToken = async () => {
   return response.data
 }
 
-export {login,refreshToken,signup, logout}
+const getProfile = async (credentials) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${credentials}`, 
+    },
+  };
+  
+  const response = await axios.get(baseUrl + 'profile', config);
+  return response;
+}
+
+export {login,refreshToken,signup, logout, getProfile}
