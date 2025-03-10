@@ -1,5 +1,42 @@
 .home-container{
-    height: 100vh;
+    min-height: 100vh;
     background-image: linear-gradient(to bottom, #7B83EB, #ADA9FF, #EDEDF2);
     padding: 25px;
+}
+
+.folders-container {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: 100px;
+    margin-top: 50px;
+    margin-left: 100px;
+
+}
+
+.folder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out;
+}
+
+.folder:hover {
+    transform: scale(1.05);
+}
+
+.folder-icon {
+    width: 150px;
+    height: 150px;
+}
+
+.folder-name {
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: #ffffff
 }
