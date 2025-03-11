@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import NavBar from "../../components/NavBar";
 import '../../styles/home.css';
 import useAuth from "../../hooks/useAuth";
-import { getFolders, createFolder } from "../../services/folder";
+import { getFolders } from "../../services/folder";
 import { useToast } from "../../context/ToastContext";
 import folderIcon from "../../assets/folder-icon.svg";
 import addFolderIcon from "../../assets/add-folder-icon.svg";
@@ -12,6 +13,7 @@ export default function Home() {
     const { addToast } = useToast();
     const { auth } = useAuth();
     const [searchName, setSearchName] = useState("");
+    const navigate = useNavigate();
     const [folders, setFolders] = useState([]);
     const [allFolders, setAllFolders] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -75,13 +77,18 @@ export default function Home() {
             </div>
             <div className="folders-container">
                 {folders.length > 0 ? (
-                    folders.map((folder, index) => (
-                        <div key={index} className="folder">
+                    folders.map((folder) => (
+                        <div 
+                            key={folder.id} 
+                            className="folder" 
+                            onClick={() => navigate(`/folder/${folder.id}`)}
+                            style={{ cursor: "pointer" }}
+                        >
                             <img 
                                 src={folderIcon} 
                                 alt="Folder Icon" 
                                 className="folder-icon" 
-                                title={folder.description || "No description available"} 
+                                title={folder.description || "No description available"}
                             />
                             <span className="folder-name">{folder.name}</span>
                         </div>

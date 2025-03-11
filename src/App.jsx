@@ -8,7 +8,7 @@ import Home from "./pages/Home/Home";
 import Profile from "./pages/Profile/Profile";
 import SplashScreen from "./pages/Splash/SplashScreen";
 import ProtectedRoutes from "./components/ProtectedRoutes";
-
+import Folder from "./pages/Folder/Folder";
 function App() {
   const router = createBrowserRouter([
     {
@@ -36,6 +36,10 @@ function App() {
             {
               path:"/profile",
               element:<Profile/>
+            },
+            {
+              path:"/folder/:folderId",
+              element: <Folder/>
             }
           ]
         },
