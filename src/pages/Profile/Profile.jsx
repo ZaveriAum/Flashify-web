@@ -27,7 +27,6 @@ export default function Profile(){
         }
 
         fetchUser();
-        console.log(user);
     }, [auth.accessToken])
 
     return(

@@ -17,6 +17,7 @@ export default function Home(){
     useEffect(()=>{
         const fetchFolders = async () =>{
             try{
+                console.log(auth.accessToken);
                 const response = await getFolders(auth.accessToken);
                 if (response.status == 200){
                     setFolders(response.data.folders);

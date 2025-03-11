@@ -7,6 +7,8 @@ import Register from './pages/Register/Register';
 import Home from "./pages/Home/Home";
 import Profile from "./pages/Profile/Profile";
 import SplashScreen from "./pages/Splash/SplashScreen";
+import ProtectedRoutes from "./components/ProtectedRoutes";
+
 function App() {
   const router = createBrowserRouter([
     {
@@ -25,13 +27,18 @@ function App() {
           element: <Register/>
         },
         {
-          path:"/app",
-          element:<Home/>
+          element: <ProtectedRoutes/>,
+          children: [
+            {
+              path:"/app",
+              element:<Home/>
+            },
+            {
+              path:"/profile",
+              element:<Profile/>
+            }
+          ]
         },
-        {
-          path:"/profile",
-          element:<Profile/>
-        }
       ]
     }
   ]);
