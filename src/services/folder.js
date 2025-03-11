@@ -13,4 +13,15 @@ const getFolders = async (credentials) => {
     return response;    
   };
 
-export { getFolders }
+const createFolder = async(data, credentials) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${credentials}`, 
+    },
+  };
+  
+  const response = await axios.post(baseUrl,data, config);
+  return response;
+}
+
+export { getFolders, createFolder }
