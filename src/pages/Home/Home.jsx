@@ -63,7 +63,7 @@ export default function Home() {
             <div className="search-container">
                 <input 
                     type="text" 
-                    placeholder="Search by Names" 
+                    placeholder="🔍   Search by Names" 
                     value={searchName} 
                     className="searchName" 
                     onChange={handleSearch} 

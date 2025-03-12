@@ -7,6 +7,10 @@ import NoteComponent from "../../components/NoteComponent";
 import "../../styles/folder.css";
 import NavBar from "../../components/NavBar";
 import useAuth from "../../hooks/useAuth";
+import aiIcon from '../../assets/ai-icon.svg';
+import noteIcon from '../../assets/note-icon.svg';
+import flashcardIcon from '../../assets/flashcard-icon.svg';
+import addIcon from '../../assets/add-icon.svg';
 
 export default function Folder() {
     const { folderId } = useParams();
@@ -16,7 +20,7 @@ export default function Folder() {
     const [flashcardCount, setFlashcardCount] = useState(0);
     const [noteCount, setNoteCount] = useState(0);
     const { auth } = useAuth();
-    
+    const [searchName, setSearchName] = useState();
     const flashcardsFetched = useRef(false);
     const notesFetched = useRef(false);
 
@@ -51,11 +55,15 @@ export default function Folder() {
         <div className="folder-page">
             <NavBar />
             <div className="switch-container">
+                <button>
+                    <img src={addIcon} alt="add-icon" className="add-icon"/>
+                </button>
+                <input type="text" placeholder="🔍   Search" className="search-note-flashcard"/>
                 <button 
                     className={view === "flashcards" ? "active" : ""} 
                     onClick={() => setView("flashcards")}
                 >
-                    Flashcards
+                    <img src={flashcardIcon} alt="flashcard-icon" className="flashcard-icon"/>
                 </button>
                 <button 
                     className={view === "notes" ? "active" : ""} 
@@ -64,9 +72,10 @@ export default function Folder() {
                         setView("notes");
                     }}
                 >
-                    Notes
+                    <img src={noteIcon} alt="note-icon" className="flashcard-icon"/>
                 </button>
             </div>
+            
 
             <div className="content-container">
                 {view === "flashcards" ? (
@@ -75,6 +84,10 @@ export default function Folder() {
                     <NoteComponent notes={notes} />
                 )}
             </div>
+
+            <button className="ai-button">
+                <img src={aiIcon} alt="ai-icon" className="ai-icon"/>
+            </button>
         </div>
     );
 }
