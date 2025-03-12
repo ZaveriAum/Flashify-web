@@ -4,6 +4,7 @@ import { getFlashcards } from "../../services/flashcard";
 import { getNotes } from "../../services/note";
 import FlashcardComponent from "../../components/FlashcardComponent";
 import NoteComponent from "../../components/NoteComponent";
+import CreateFlashcardModal from "../../components/CreateFlashcardModal"; // Import modal
 import "../../styles/folder.css";
 import NavBar from "../../components/NavBar";
 import useAuth from "../../hooks/useAuth";
@@ -20,7 +21,8 @@ export default function Folder() {
     const [flashcardCount, setFlashcardCount] = useState(0);
     const [noteCount, setNoteCount] = useState(0);
     const { auth } = useAuth();
-    const [searchName, setSearchName] = useState();
+    const [searchQuery, setSearchQuery] = useState(""); 
+    const [showModal, setShowModal] = useState(false); // State to control modal visibility
     const flashcardsFetched = useRef(false);
     const notesFetched = useRef(false);
 
@@ -41,7 +43,6 @@ export default function Folder() {
             if (!auth.accessToken || notesFetched.current) return;
             notesFetched.current = true;
             const response = await getNotes(folderId, auth.accessToken);
-            console.log("Fetching Notes:", response);
             setNotes(response.data.notes);
             setNoteCount(response.length);
         };
@@ -51,14 +52,31 @@ export default function Folder() {
         }
     }, [view, auth.accessToken, noteCount]);
 
+    // Filtered results based on search query
+    const filteredFlashcards = flashcards.filter(flashcard =>
+        flashcard.question.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
+    const filteredNotes = notes.filter(note =>
+        note.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        note.note.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
     return (
         <div className="folder-page">
             <NavBar />
             <div className="switch-container">
-                <button>
+                <button onClick={() => setShowModal(true)}>
                     <img src={addIcon} alt="add-icon" className="add-icon"/>
                 </button>
-                <input type="text" placeholder="🔍   Search" className="search-note-flashcard"/>
+                {/* Search input */}
+                <input
+                    type="text"
+                    placeholder="🔍   Search"
+                    className="search-note-flashcard"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                />
                 <button 
                     className={view === "flashcards" ? "active" : ""} 
                     onClick={() => setView("flashcards")}
@@ -75,19 +93,21 @@ export default function Folder() {
                     <img src={noteIcon} alt="note-icon" className="flashcard-icon"/>
                 </button>
             </div>
-            
 
             <div className="content-container">
                 {view === "flashcards" ? (
-                    <FlashcardComponent flashcards={flashcards} />
+                    <FlashcardComponent flashcards={filteredFlashcards} />
                 ) : (
-                    <NoteComponent notes={notes} />
+                    <NoteComponent notes={filteredNotes} />
                 )}
             </div>
 
             <button className="ai-button">
                 <img src={aiIcon} alt="ai-icon" className="ai-icon"/>
             </button>
+
+            {/* Show modal only if "Add" button is clicked */}
+            {showModal && <CreateFlashcardModal onClose={() => setShowModal(false)} />}
         </div>
     );
 }
