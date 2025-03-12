@@ -1,13 +1,18 @@
 import "../styles/createFlashcardModal.css";
 import { useState } from "react";
 import closeIcon from "../assets/close-button-icon.svg";
-import FileInput from "./FileInput"; // Importing the new FileInput component
-import { useToast } from "../context/ToastContext";
+import FileInput from "./FileInput";
 
-export default function CreateFlashcardModal({ onClose }) {
+export default function CreateFlashcardModal({ onClose, handleCreateFlashcard }) {
     const [manually, setManually] = useState(true);
     const [uploadedFile, setUploadedFile] = useState(null);
-    const { addToast } = useToast();
+    const [question, setQuestion] = useState("");
+    const [answer, setAnswer] = useState("");
+
+    const createFlashcard = () => {
+        if (!question.trim() && !answer.trim()) return;
+        handleCreateFlashcard({ answer, question });
+    }
 
     return (
         <div className="create-flashcard-modal-overlay">
@@ -29,15 +34,15 @@ export default function CreateFlashcardModal({ onClose }) {
                 <div className="create-flashcard-input-container">
                     {manually ? (
                         <div className="manual-flashcard-input">
-                            <input type="text" placeholder="Question" required />
-                            <textarea placeholder="Answer" required />
+                            <input value={question} onChange={(e) => setQuestion(e.target.value)} type="text" placeholder="Question" required />
+                            <textarea value={answer} onChange={(e) => setAnswer(e.target.value)} placeholder="Answer" required />
                         </div>
                     ) : (
                         <FileInput onFileSelected={setUploadedFile} />
                     )}
                 </div>
-                <button className="create-flashcard-button">
-                    <p>{manually ? "Create" : "Generate"}</p>
+                <button className="create-flashcard-button" onClick={createFlashcard}>
+                    <p >{manually ? "Create" : "Generate"}</p>
                 </button>
             </div>
         </div>

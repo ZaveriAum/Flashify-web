@@ -12,4 +12,14 @@ const getFlashcards = async (id, credentials) => {
     return response;    
   };
 
-export { getFlashcards }
+const createFlashcard = async (id, data, credentials) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${credentials}`, 
+    },
+  };
+  const response = await axios.post(baseUrl + `${id}`,data, config);
+  return response
+}
+
+export { getFlashcards, createFlashcard }

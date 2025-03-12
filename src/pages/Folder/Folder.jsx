@@ -1,10 +1,10 @@
 import { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
-import { getFlashcards } from "../../services/flashcard";
+import { createFlashcard, getFlashcards } from "../../services/flashcard";
 import { getNotes } from "../../services/note";
 import FlashcardComponent from "../../components/FlashcardComponent";
 import NoteComponent from "../../components/NoteComponent";
-import CreateFlashcardModal from "../../components/CreateFlashcardModal"; // Import modal
+import CreateFlashcardModal from "../../components/CreateFlashcardModal";
 import "../../styles/folder.css";
 import NavBar from "../../components/NavBar";
 import useAuth from "../../hooks/useAuth";
@@ -12,6 +12,7 @@ import aiIcon from '../../assets/ai-icon.svg';
 import noteIcon from '../../assets/note-icon.svg';
 import flashcardIcon from '../../assets/flashcard-icon.svg';
 import addIcon from '../../assets/add-icon.svg';
+import { useToast } from "../../context/ToastContext";
 
 export default function Folder() {
     const { folderId } = useParams();
@@ -22,9 +23,10 @@ export default function Folder() {
     const [noteCount, setNoteCount] = useState(0);
     const { auth } = useAuth();
     const [searchQuery, setSearchQuery] = useState(""); 
-    const [showModal, setShowModal] = useState(false); // State to control modal visibility
+    const [showModal, setShowModal] = useState(false);
     const flashcardsFetched = useRef(false);
     const notesFetched = useRef(false);
+    const { addToast } = useToast();
 
     useEffect(() => {
         const fetchFlashcards = async () => {
@@ -36,6 +38,7 @@ export default function Folder() {
         };
 
         fetchFlashcards();
+        console.log(flashcards)
     }, [folderId, auth.accessToken, flashcardCount]);
 
     useEffect(() => {
@@ -52,7 +55,6 @@ export default function Folder() {
         }
     }, [view, auth.accessToken, noteCount]);
 
-    // Filtered results based on search query
     const filteredFlashcards = flashcards.filter(flashcard =>
         flashcard.question.toLowerCase().includes(searchQuery.toLowerCase())
     );
@@ -62,6 +64,24 @@ export default function Folder() {
         note.note.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
+
+    const handleCreateFlashcard = async (flashcardData)=>{
+        try {
+            const response = await createFlashcard(folderId, flashcardData, auth.accessToken);
+            if (response.status === 201) {
+                addToast("Flashcard created successfully!", "success");
+                setShowModal(false);
+                setFlashcardCount(flashcardCount + 1);
+                setFlashcards([...flashcards, response.data.flashcard])
+            } else {
+                addToast(response.data.message, "failure");
+            }
+        } catch (e) {
+            console.log(e)
+            addToast("Error creating flashcard", "failure");
+        }
+    }
+
     return (
         <div className="folder-page">
             <NavBar />
@@ -69,7 +89,6 @@ export default function Folder() {
                 <button onClick={() => setShowModal(true)}>
                     <img src={addIcon} alt="add-icon" className="add-icon"/>
                 </button>
-                {/* Search input */}
                 <input
                     type="text"
                     placeholder="🔍   Search"
@@ -106,8 +125,7 @@ export default function Folder() {
                 <img src={aiIcon} alt="ai-icon" className="ai-icon"/>
             </button>
 
-            {/* Show modal only if "Add" button is clicked */}
-            {showModal && <CreateFlashcardModal onClose={() => setShowModal(false)} />}
+            {showModal && <CreateFlashcardModal onClose={() => setShowModal(false)} handleCreateFlashcard={handleCreateFlashcard} />}
         </div>
     );
 }

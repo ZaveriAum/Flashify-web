@@ -63,7 +63,6 @@ export default function FileInput({ onFileSelected }) {
     };
     
     const openFileDialog = (e) => {
-        // Prevent event from bubbling up to parent elements
         e.stopPropagation();
         fileInputRef.current.click();
     };

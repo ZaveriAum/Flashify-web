@@ -20,7 +20,7 @@ export default function NoteModal({ note, onClose }) {
                                 const match = /language-(\w+)/.exec(className || "");
                                 return match ? (
                                     <SyntaxHighlighter
-                                        style={oneDark} // Dark theme
+                                        style={oneDark}
                                         language={match[1]}
                                         PreTag="div"
                                     >
