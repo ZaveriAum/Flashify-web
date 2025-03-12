@@ -8,7 +8,6 @@ const getFlashcards = async (id, credentials) => {
         Authorization: `Bearer ${credentials}`, 
       },
     };
-    console.log(baseUrl + `${id}`)
     const response = await axios.get(baseUrl + `${id}`, config);
     return response;    
   };

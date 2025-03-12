@@ -25,7 +25,6 @@ export default function Folder() {
             if (!auth.accessToken || flashcardsFetched.current) return;
             flashcardsFetched.current = true;
             const response = await getFlashcards(folderId, auth.accessToken);
-            console.log("Fetching Flashcards:", response);
             setFlashcards(response.data.flashcards);
             setFlashcardCount(response.length);
         };

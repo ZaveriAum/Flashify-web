@@ -20,7 +20,6 @@ function Register() {
     e.preventDefault();
     try {
       const response = await signup({ username, email,password });
-      console.log(response)
       setAuth({accessToken:response.data.accessToken})
       if (response.status >= 400 && response.status < 500) {
         addToast(response.data.message, "failure");
