@@ -2,16 +2,61 @@ import "../styles/createFlashcardModal.css";
 import { useState } from "react";
 import closeIcon from "../assets/close-button-icon.svg";
 import FileInput from "./FileInput";
+import GenerateFlashcardsModal from "./GeneratedFlashcardsModal";
+import { useToast } from "../context/ToastContext";
+import { generateFlashcards } from "../services/ai";
+import useAuth from "../hooks/useAuth";
 
 export default function CreateFlashcardModal({ onClose, handleCreateFlashcard }) {
     const [manually, setManually] = useState(true);
     const [uploadedFile, setUploadedFile] = useState(null);
     const [question, setQuestion] = useState("");
     const [answer, setAnswer] = useState("");
+    const [generatedFlashcards, setGeneratedFlashcards] = useState([]);
+    const [generateFlashcardModal, setGenerateFlashcardModal] = useState(false);
+    const { addToast } = useToast();
+    const { auth } = useAuth();
 
-    const createFlashcard = () => {
-        if (!question.trim() && !answer.trim()) return;
-        handleCreateFlashcard({ answer, question });
+    const createFlashcard = async () => {
+        if(manually){
+            if (!question.trim() && !answer.trim()) return;
+            handleCreateFlashcard({ answer, question });
+        }else{
+            await handleGenerateFlashcards();
+        }
+    }
+
+    const handleGenerateFlashcards = async ()=>{
+        try{
+            let formData = new FormData();
+            formData.append("file", uploadedFile);
+            const response = await generateFlashcards(formData, auth.accessToken);
+            if (response.status === 200){
+                console.log(response.data.flashcards);
+                setGeneratedFlashcards(response.data.flashcards);
+                setGenerateFlashcardModal(true);
+            }else if (response.status < 500){
+                addToast(response.data.message, "failure");
+            }else{
+                addToast("Unknow Error Generating Flashcards", "failure");
+            }
+        }catch(e){
+            console.log(e);
+            addToast("Error Generating Flashcards", "failure");
+        }
+    }
+
+    const addAllFlashcards = async (flashcards)=>{
+        try{
+            for (const flashcard of flashcards) {
+                if (flashcard.question.trim() && flashcard.answer.trim()) {
+                    await handleCreateFlashcard({ answer: flashcard.answer, question: flashcard.question });
+                }
+            }
+        }catch(e){
+            console.log(e)
+            addToast("Unknown Error", "failure");
+        }
     }
 
     return (
@@ -45,6 +90,9 @@ export default function CreateFlashcardModal({ onClose, handleCreateFlashcard })
                     <p >{manually ? "Create" : "Generate"}</p>
                 </button>
             </div>
+            {generateFlashcardModal && (
+                < GenerateFlashcardsModal flashcards={generatedFlashcards} onClose={()=>setGenerateFlashcardModal(false)} onAddAll={addAllFlashcards} handleAddFlashcard={handleCreateFlashcard}/>
+            )}
         </div>
     );
 }

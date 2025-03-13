@@ -1,0 +1,161 @@
+.generated-flashcards-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    z-index: 1000;
+}
+
+.generated-flashcards-content {
+    background: #7B83EB;
+    padding: 20px;
+    border-radius: 15px;
+    width: 90%;
+    max-width: 700px;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.generated-flashcards-header-container {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #7B83EB;
+    color: white;
+    font-size: 1.5rem;
+    font-weight: bold;
+    padding: 15px 20px;
+    border-radius: 10px 10px 0 0;
+}
+
+.generate-flashcards-close-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.generated-flashcard-modal-close-button-icon {
+    width: 28px;
+    height: 28px;
+    transition: transform 0.2s ease-in-out;
+}
+
+.generated-flashcard-modal-close-button-icon:hover {
+    transform: scale(1.2);
+}
+
+.generated-flashcards-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 15px;
+    padding: 20px;
+    justify-content: center;
+    align-items: center;
+}
+
+.generated-flashcards-flashcard {
+    width: 120px;
+    height: 140px;
+    perspective: 1000px;
+    cursor: pointer;
+    position: relative;
+    border-radius: 10px;
+    transition: transform 0.3s ease;
+}
+
+.generated-flashcards-flashcard:hover {
+    transform: scale(2);
+    z-index: 10000;
+}
+
+.generated-flashcards-inner {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.6s ease-in-out;
+}
+
+.generated-flashcards-flashcard.flipped .generated-flashcards-inner {
+    transform: rotateY(180deg);
+}
+
+.generated-flashcards-front,
+.generated-flashcards-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    font-size: 1rem;
+    font-weight: bold;
+    text-align: center;
+    box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.2);
+}
+
+.generated-flashcards-front {
+    background: white;
+    color: #4D4D9A;
+}
+
+.generated-flashcards-back {
+    background: #7B83EB;
+    color: white;
+    transform: rotateY(180deg);
+}
+
+.generated-flashcards-text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 90%;
+}
+
+.generated-flashcards-text:hover {
+    font-size: 0.6rem;
+    white-space: normal;
+    overflow: visible;
+}
+
+.add-all-button {
+    background: #4D4D9A;
+    color: white;
+    font-size: 1.2rem;
+    font-weight: bold;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    margin-top: 15px;
+}
+
+.add-all-button:hover {
+    background: #ADA9FF;
+}
+
+@media screen and (max-width: 768px) {
+    .generated-flashcards-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .generated-flashcards-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
