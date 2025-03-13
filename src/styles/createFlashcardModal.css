@@ -166,3 +166,45 @@
 .hidden{
     display: none;
 }
+
+.loader {
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #4D4D9A;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    animation: spin 0.8s linear infinite;
+    display: inline-block;
+    margin: 0 auto;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.create-flashcard-button:disabled {
+    background: #AAA;
+    cursor: not-allowed;
+}
+
+.loader {
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #4D4D9A;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    animation: spin 0.8s linear infinite;
+    display: inline-block;
+    margin: 0 auto;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.create-flashcard-button:disabled {
+    background: #AAA;
+    cursor: not-allowed;
+}
