@@ -38,7 +38,9 @@
 }
 
 .generate-flashcards-close-button {
-    background: none;
+    display: flex;
+    border-radius: 20px;
+    background: white;
     border: none;
     cursor: pointer;
 }
@@ -71,6 +73,7 @@
     position: relative;
     border-radius: 10px;
     transition: transform 0.3s ease;
+    overflow: visible;
 }
 
 .generated-flashcards-flashcard:hover {
@@ -129,6 +132,30 @@
     font-size: 0.6rem;
     white-space: normal;
     overflow: visible;
+}
+
+.add-flashcard-button {
+    display: flex;
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: white;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out;
+    z-index: 10;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.add-flashcard-icon {
+    width: 20px;
+    height: 20px;
+}
+
+.add-flashcard-button:hover {
+    transform: scale(1.2);
+    background: #7B83EB;
 }
 
 .add-all-button {

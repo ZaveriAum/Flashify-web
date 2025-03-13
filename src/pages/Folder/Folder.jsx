@@ -70,9 +70,9 @@ export default function Folder() {
             const response = await createFlashcard(folderId, flashcardData, auth.accessToken);
             if (response.status === 201) {
                 addToast("Flashcard created successfully!", "success");
-                setShowModal(false);
                 setFlashcardCount(flashcardCount + 1);
                 setFlashcards([...flashcards, response.data.flashcard])
+                return true;
             } else {
                 addToast(response.data.message, "failure");
             }

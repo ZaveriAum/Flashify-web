@@ -32,7 +32,6 @@ export default function CreateFlashcardModal({ onClose, handleCreateFlashcard })
             formData.append("file", uploadedFile);
             const response = await generateFlashcards(formData, auth.accessToken);
             if (response.status === 200){
-                console.log(response.data.flashcards);
                 setGeneratedFlashcards(response.data.flashcards);
                 setGenerateFlashcardModal(true);
             }else if (response.status < 500){

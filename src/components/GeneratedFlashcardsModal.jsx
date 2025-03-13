@@ -1,23 +1,43 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import closeIcon from '../assets/close-button-icon.svg';
+import addIcon from '../assets/add-icon.svg';
 import '../styles/generatedFlashcards.css';
 
 export default function GenerateFlashcardsModal({ flashcards, onClose, onAddAll, handleAddFlashcard }) {
     const [flipped, setFlipped] = useState(Array(flashcards.length).fill(false));
-    
+    const [genFlashcards, setGenFlashcards] = useState([]);
+
+    useEffect(() => {
+        setGenFlashcards(flashcards);
+    }, [flashcards]);
+
     const handleFlip = (index) => {
         const newFlipped = [...flipped];
         newFlipped[index] = !newFlipped[index];
         setFlipped(newFlipped);
     };
 
-    const handleAddAllFlashcards = async()=>{
-        try{
-            await onAddAll(flashcards);
-        }catch(e){
-            
+    const handleAddGeneratedFlashcard = async (flashcardToAdd) => {
+        try {
+            if(await handleAddFlashcard(flashcardToAdd)){
+
+            const updatedFlashcards = genFlashcards.filter(flashcard => flashcard !== flashcardToAdd);
+            setFlipped(Array(updatedFlashcards.length).fill(false));
+            setGenFlashcards(updatedFlashcards);
+            }
+        } catch (e) {
+            console.error("Error adding flashcard:", e);
         }
-    }
+    };
+
+    const handleAddAllFlashcards = async () => {
+        try {
+            await onAddAll(genFlashcards);
+            setGenFlashcards([]);
+        } catch (e) {
+            console.error("Error adding all flashcards:", e);
+        }
+    };
 
     return (
         <div className="generated-flashcards-container">
@@ -30,14 +50,13 @@ export default function GenerateFlashcardsModal({ flashcards, onClose, onAddAll,
                 </div>
 
                 <div className="generated-flashcards-grid">
-                    {flashcards.length > 0 ? (
-                        flashcards.map((flashcard, index) => (
-                            <div
-                                key={index}
-                                className={`generated-flashcards-flashcard ${flipped[index] ? "flipped" : ""}`} 
-                                onClick={() => handleFlip(index)}
-                            >
-                                <div className="generated-flashcards-inner">
+                    {genFlashcards.length > 0 ? (
+                        genFlashcards.map((flashcard, index) => (
+                            <div key={index} className={`generated-flashcards-flashcard ${flipped[index] ? "flipped" : ""}`}>
+                                <button className="add-flashcard-button" onClick={() => handleAddGeneratedFlashcard(flashcard)}>
+                                    <img src={addIcon} alt="Add" className="add-flashcard-icon"/>
+                                </button>
+                                <div className="generated-flashcards-inner" onClick={() => handleFlip(index)}>
                                     <div className="generated-flashcards-front">
                                         <p className="generated-flashcards-text">{flashcard.question}</p>
                                     </div>
