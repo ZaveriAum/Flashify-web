@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { createFlashcard, getFlashcards } from "../../services/flashcard";
-import { getNotes } from "../../services/note";
+import { createNote, getNotes } from "../../services/note";
 import FlashcardComponent from "../../components/FlashcardComponent";
 import NoteComponent from "../../components/NoteComponent";
 import CreateFlashcardModal from "../../components/CreateFlashcardModal";
@@ -13,6 +13,7 @@ import noteIcon from '../../assets/note-icon.svg';
 import flashcardIcon from '../../assets/flashcard-icon.svg';
 import addIcon from '../../assets/add-icon.svg';
 import { useToast } from "../../context/ToastContext";
+import CreateNoteModal from "../../components/CreateNoteModal";
 
 export default function Folder() {
     const { folderId } = useParams();
@@ -38,7 +39,6 @@ export default function Folder() {
         };
 
         fetchFlashcards();
-        console.log(flashcards)
     }, [folderId, auth.accessToken, flashcardCount]);
 
     useEffect(() => {
@@ -79,6 +79,23 @@ export default function Folder() {
         } catch (e) {
             console.log(e)
             addToast("Error creating flashcard", "failure");
+        }
+    }
+
+    const handleCreateNote = async (noteData)=>{
+        try{
+            const response = await createNote(folderId, noteData, auth.accessToken);
+            if (response.status === 201) {
+                addToast("Note created successfully!", "success");
+                setShowModal(false);
+                setNoteCount(noteCount + 1);
+                setNotes([...notes, response.data.note]);
+            } else {
+                addToast(response.data.message, "failure");
+            }
+        }catch(e){
+            console.log(e)
+            addToast("Error creating note", "failure");
         }
     }
 
@@ -125,7 +142,19 @@ export default function Folder() {
                 <img src={aiIcon} alt="ai-icon" className="ai-icon"/>
             </button>
 
-            {showModal && <CreateFlashcardModal onClose={() => setShowModal(false)} handleCreateFlashcard={handleCreateFlashcard} />}
+            {showModal && (
+                view === "flashcards" ? (
+                    <CreateFlashcardModal 
+                        onClose={() => setShowModal(false)} 
+                        handleCreateFlashcard={handleCreateFlashcard} 
+                    />
+                ) : (
+                    <CreateNoteModal 
+                        onClose={() => setShowModal(false)} 
+                        handleCreateNote={handleCreateNote} 
+                    />
+                )
+            )}
         </div>
     );
 }

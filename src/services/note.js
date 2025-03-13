@@ -13,4 +13,14 @@ const getNotes = async (id, credentials) => {
     return response;    
   };
 
-export {getNotes}
+  const createNote = async (id, data, credentials) => {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${credentials}`, 
+      },
+    };
+    const response = await axios.post(baseUrl + `${id}`,data, config);
+    return response
+  }
+
+export {getNotes, createNote}
