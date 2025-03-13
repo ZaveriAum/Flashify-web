@@ -14,6 +14,8 @@ import flashcardIcon from '../../assets/flashcard-icon.svg';
 import addIcon from '../../assets/add-icon.svg';
 import { useToast } from "../../context/ToastContext";
 import CreateNoteModal from "../../components/CreateNoteModal";
+import InteractWithAIModal from "../../components/InteractWithAIModal";
+import { interactWithFlashcards, interactWithNotes } from "../../services/ai";
 
 export default function Folder() {
     const { folderId } = useParams();
@@ -25,9 +27,12 @@ export default function Folder() {
     const { auth } = useAuth();
     const [searchQuery, setSearchQuery] = useState(""); 
     const [showModal, setShowModal] = useState(false);
+    const [showChatModal, setShowChatModal] = useState(false);
     const flashcardsFetched = useRef(false);
     const notesFetched = useRef(false);
     const { addToast } = useToast();
+    const [chatsFlashcards, setChatsFlashcards] = useState([]);
+    const [chatsNotes, setChatsNotes] = useState([]);
 
     useEffect(() => {
         const fetchFlashcards = async () => {
@@ -55,49 +60,21 @@ export default function Folder() {
         }
     }, [view, auth.accessToken, noteCount]);
 
-    const filteredFlashcards = flashcards.filter(flashcard =>
-        flashcard.question.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-
-    const filteredNotes = notes.filter(note =>
-        note.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        note.note.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-
-
-    const handleCreateFlashcard = async (flashcardData)=>{
+    const handleChatSubmit = async (prompt) => {
         try {
-            const response = await createFlashcard(folderId, flashcardData, auth.accessToken);
-            if (response.status === 201) {
-                addToast("Flashcard created successfully!", "success");
-                setFlashcardCount(flashcardCount + 1);
-                setFlashcards([...flashcards, response.data.flashcard])
-                return true;
+            if (view === "flashcards") {
+                const response = await interactWithFlashcards({prompt}, folderId, auth.accessToken);
+                const chatEntry = { prompt, chatifyBot: response.data.response};
+                setChatsFlashcards([...chatsFlashcards, chatEntry]);
             } else {
-                addToast(response.data.message, "failure");
+                const response = await interactWithFlashcards({prompt}, folderId, auth.accessToken);
+                const chatEntry = { prompt, chatifyBot: response.data.response};
+                setChatsNotes([...chatsNotes, chatEntry]);
             }
-        } catch (e) {
-            console.log(e)
-            addToast("Error creating flashcard", "failure");
+        } catch (error) {
+            addToast("Error processing AI response", "failure");
         }
-    }
-
-    const handleCreateNote = async (noteData)=>{
-        try{
-            const response = await createNote(folderId, noteData, auth.accessToken);
-            if (response.status === 201) {
-                addToast("Note created successfully!", "success");
-                setShowModal(false);
-                setNoteCount(noteCount + 1);
-                setNotes([...notes, response.data.note]);
-            } else {
-                addToast(response.data.message, "failure");
-            }
-        }catch(e){
-            console.log(e)
-            addToast("Error creating note", "failure");
-        }
-    }
+    };
 
     return (
         <div className="folder-page">
@@ -132,13 +109,13 @@ export default function Folder() {
 
             <div className="content-container">
                 {view === "flashcards" ? (
-                    <FlashcardComponent flashcards={filteredFlashcards} />
+                    <FlashcardComponent flashcards={flashcards} />
                 ) : (
-                    <NoteComponent notes={filteredNotes} />
+                    <NoteComponent notes={notes} />
                 )}
             </div>
 
-            <button className="ai-button">
+            <button className="ai-button" onClick={() => setShowChatModal(true)}>
                 <img src={aiIcon} alt="ai-icon" className="ai-icon"/>
             </button>
 
@@ -146,14 +123,20 @@ export default function Folder() {
                 view === "flashcards" ? (
                     <CreateFlashcardModal 
                         onClose={() => setShowModal(false)} 
-                        handleCreateFlashcard={handleCreateFlashcard} 
                     />
                 ) : (
                     <CreateNoteModal 
-                        onClose={() => setShowModal(false)} 
-                        handleCreateNote={handleCreateNote} 
+                        onClose={() => setShowModal(false)}
                     />
                 )
+            )}
+
+            {showChatModal && (
+                <InteractWithAIModal 
+                    onClose={() => setShowChatModal(false)}
+                    interactions={view === "flashcards" ? chatsFlashcards : chatsNotes}
+                    handleChatSubmit={handleChatSubmit}
+                />
             )}
         </div>
     );
